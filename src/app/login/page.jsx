@@ -10,7 +10,8 @@ import {
   ArrowRightIcon,
   LockClosedIcon,
   EnvelopeIcon,
-  BookOpenIcon,
+  CodeBracketSquareIcon,
+  SparklesIcon
 } from "@heroicons/react/24/outline";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -77,40 +78,45 @@ export default function LoginPage() {
         <Header />
 
         <main className="flex-grow flex items-center justify-center px-4 sm:px-6 py-12">
-          {/* Unified Single Container */}
+          {/* Unified Single Container with Modern Split Layout */}
           <div
             data-aos="fade-up"
-            className="w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2 border"
+            className="w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 border backdrop-blur-xl"
             style={{
               backgroundColor: 'var(--card-bg)',
               borderColor: 'var(--border-color)',
             }}
           >
-            {/* Left Side: Form Fields */}
-            <div className="p-8 sm:p-12 flex flex-col justify-center space-y-6">
+            {/* Left Side: Form Fields (Cols 7/12) */}
+            <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-center space-y-6">
               
               {/* Brand Header */}
               <div
-                className="flex flex-col items-center justify-center space-y-2 mb-2"
+                className="flex flex-col items-start space-y-2 mb-2"
                 data-aos="fade-down"
                 data-aos-delay="100"
               >
-                <div 
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-md mb-1"
-                  style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
-                >
-                  <BookOpenIcon className="h-7 w-7" />
+                <div className="flex items-center gap-2 mb-1">
+                  <div 
+                    className="p-2.5 rounded-2xl shadow-md flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+                  >
+                    <CodeBracketSquareIcon className="h-6 w-6" />
+                  </div>
+                  <span className="text-xs px-2.5 py-1 rounded-full uppercase tracking-widest font-extrabold" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>
+                    Author Access
+                  </span>
                 </div>
-                <h1 className="text-2xl font-extrabold tracking-tight font-theme-heading">
-                  Softgenie <span style={{ color: 'var(--accent)' }}>Journal</span>
+                <h1 className="text-3xl font-extrabold tracking-tight font-theme-heading">
+                  Welcome back to <span style={{ color: 'var(--accent)' }}>Codewalk</span>
                 </h1>
-                <p className="font-theme-body leading-relaxed text-center opacity-80" style={{ color: 'var(--text-muted)' }}>
-                  Welcome back! Sign in to continue your mindful daily reflection.
+                <p className="font-theme-body leading-relaxed opacity-80 text-sm" style={{ color: 'var(--text-muted)' }}>
+                  Sign in to manage your blog articles, projects showcase, and gallery snapshots.
                 </p>
               </div>
 
               {(error || localError) && (
-                <div className="text-rose-500 bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl font-medium">
+                <div className="text-rose-500 bg-rose-500/10 border border-rose-500/20 p-3.5 rounded-2xl font-medium text-sm">
                   {localError || error}
                 </div>
               )}
@@ -134,8 +140,8 @@ export default function LoginPage() {
               {/* Divider */}
               <div className="flex items-center my-1">
                 <div className="flex-grow border-t" style={{ borderColor: 'var(--border-color)' }} />
-                <span className="px-3 text-[10px] uppercase tracking-wider opacity-50 font-bold">
-                  Or manual sign in
+                <span className="px-3 text-[10px] uppercase tracking-widest opacity-50 font-extrabold">
+                  Or sign in with email
                 </span>
                 <div className="flex-grow border-t" style={{ borderColor: 'var(--border-color)' }} />
               </div>
@@ -149,7 +155,7 @@ export default function LoginPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor="email"
-                    className="block font-bold uppercase tracking-wider font-theme-heading opacity-80"
+                    className="block text-xs font-bold uppercase tracking-wider font-theme-heading opacity-80"
                     style={{ color: 'var(--text-main)' }}
                   >
                     Email Address
@@ -163,13 +169,13 @@ export default function LoginPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl border focus:outline-none transition-colors shadow-inner"
+                      className="w-full pl-10 pr-4 py-3 text-sm rounded-2xl border focus:outline-none transition-colors shadow-inner"
                       style={{
                         backgroundColor: 'var(--bg-primary)',
                         borderColor: 'var(--border-color)',
                         color: 'var(--text-main)',
                       }}
-                      placeholder="user@logjournal.org"
+                      placeholder="author@codewalk.org"
                       required
                     />
                   </div>
@@ -178,7 +184,7 @@ export default function LoginPage() {
                 <div className="space-y-1.5">
                   <label
                     htmlFor="password"
-                    className="block font-bold uppercase tracking-wider font-theme-heading opacity-80"
+                    className="block text-xs font-bold uppercase tracking-wider font-theme-heading opacity-80"
                     style={{ color: 'var(--text-main)' }}
                   >
                     Password
@@ -192,7 +198,7 @@ export default function LoginPage() {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 text-sm rounded-xl border focus:outline-none transition-colors shadow-inner"
+                      className="w-full pl-10 pr-4 py-3 text-sm rounded-2xl border focus:outline-none transition-colors shadow-inner"
                       style={{
                         backgroundColor: 'var(--bg-primary)',
                         borderColor: 'var(--border-color)',
@@ -207,14 +213,14 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 text-sm font-bold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer mt-2 rounded-xl font-theme-heading hover:opacity-90"
+                  className="w-full py-3.5 text-sm font-extrabold transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer mt-3 rounded-2xl font-theme-heading hover:opacity-90"
                   style={{
                     backgroundColor: 'var(--accent)',
                     color: 'var(--bg-primary)',
                   }}
                 >
                   <span>
-                    {loading ? "Signing in..." : "Sign in to Softgenie Journal"}
+                    {loading ? "Authenticating..." : "Sign in to Dashboard"}
                   </span>
                   <ArrowRightIcon className="h-4 w-4" />
                 </button>
@@ -222,12 +228,12 @@ export default function LoginPage() {
 
               {/* Footer Link */}
               <div
-                className="text-center font-theme-body pt-4 border-t opacity-80"
+                className="text-center font-theme-body pt-4 border-t text-sm opacity-80"
                 style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}
                 data-aos="fade-in"
                 data-aos-delay="300"
               >
-                Don't have an account?{" "}
+                Don't have an author account?{" "}
                 <Link
                   href="/register"
                   className="font-bold hover:underline"
@@ -238,28 +244,35 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Right Side: Journal-Themed Background Image Container */}
-            <div className="hidden lg:relative lg:flex items-center justify-center p-6 overflow-hidden min-h-[480px]">
-              <div className="absolute inset-4 rounded-2xl overflow-hidden shadow-inner border" style={{ borderColor: 'var(--border-color)' }}>
+            {/* Right Side: Developer Workspace Showcase (Cols 5/12) */}
+            <div className="hidden lg:col-span-5 lg:relative lg:flex items-center justify-center p-6 overflow-hidden min-h-[520px]">
+              <div className="absolute inset-4 rounded-3xl overflow-hidden shadow-2xl border flex flex-col justify-end p-8" style={{ borderColor: 'var(--border-color)' }}>
                 <Image
-                  src="https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1200&auto=format&fit=crop"
-                  alt="Mindful Journaling Experience"
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop"
+                  alt="Developer Workspace"
                   fill
                   priority
-                  className="object-cover opacity-90 scale-105 hover:scale-100 transition-transform duration-700"
+                  className="object-cover opacity-85 scale-105 hover:scale-100 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-8 text-white">
-                  <blockquote className="space-y-2">
-                    <p className="text-sm italic font-theme-body text-gray-200">
-                      "Journaling is like whispering to one's self and listening at the same time."
-                    </p>
-                    <footer className="opacity-75 font-theme-heading tracking-wide uppercase">
-                      — Mina Murray
-                    </footer>
-                  </blockquote>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-8 text-white">
+                  <div className="space-y-3">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md bg-white/10 text-white border border-white/20">
+                      <SparklesIcon className="h-3.5 w-3.5 text-amber-400" />
+                      <span>Digital Garden</span>
+                    </div>
+                    <blockquote className="space-y-1.5">
+                      <p className="text-sm italic font-theme-body text-gray-200 leading-relaxed">
+                        "First, solve the problem. Then, write the code and share the story."
+                      </p>
+                      <footer className="text-xs opacity-75 font-theme-heading tracking-widest uppercase">
+                        — John Johnson
+                      </footer>
+                    </blockquote>
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
         </main>
 
