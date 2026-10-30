@@ -1,102 +1,99 @@
 'use client';
 
 import Link from 'next/link';
-import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { CodeBracketSquareIcon, SparklesIcon, BookOpenIcon, PhotoIcon } from '@heroicons/react/24/outline';
 
 const Footer = () => {
   return (
     <footer 
-      className="border-t transition-colors duration-300"
+      className="border-t transition-colors duration-300 mt-auto"
       style={{
         backgroundColor: 'var(--bg-secondary)',
         borderColor: 'var(--border-color)',
         color: 'var(--text-main)',
       }}
     >
-      <div className="container mx-auto px-6 pt-12 pb-8 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 mb-12">
+      <div className="container mx-auto px-6 pt-16 pb-10 max-w-7xl">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-12 mb-12">
           
-          {/* Column 1: Brand & Description (Takes ~50% space) */}
+          {/* Column 1: Brand & Description */}
           <div className="space-y-4 pr-4">
-            <Link href="/" className="inline-flex items-center gap-2 group">
+            <Link href="/" className="inline-flex items-center gap-3 group">
               <div 
-                className="p-1.5 rounded-lg transition-transform group-hover:scale-105"
+                className="p-2 rounded-xl transition-transform group-hover:scale-105 shadow-md"
                 style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
               >
-                <BookOpenIcon className="h-4 w-4" />
+                <CodeBracketSquareIcon className="h-5 w-5" />
               </div>
-              <span className="text-2xl font-bold font-theme-heading tracking-tight" style={{ color: 'var(--text-main)' }}>
-                Softgenie <span style={{ color: 'var(--accent)' }}> Journal</span>
+              <span className="text-2xl font-extrabold font-theme-heading tracking-tight" style={{ color: 'var(--text-main)' }}>
+                Codewalk <span className="text-sm px-2 py-0.5 rounded-full uppercase tracking-widest font-bold ml-1" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>Blog</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed font-theme-body opacity-80 max-w-md" style={{ color: 'var(--text-muted)' }}>
-              A flexible daily journaling and self-reflection platform featuring block-based rich text prompts, custom categories, habit tracking, and tag management.
+              My personal digital garden and portfolio showcasing software engineering articles, technical projects, and visual snapshots powered by FastAPI and Next.js.
             </p>
           </div>
 
-          {/* Column 2: Navigation Links */}
+          {/* Column 2: Sections Navigation */}
           <div className="space-y-3 font-theme-body">
-            <h3 className="font-bold uppercase tracking-widest opacity-60" style={{ color: 'var(--text-main)' }}>
-              Navigation
+            <h3 className="font-extrabold text-xs uppercase tracking-widest opacity-60" style={{ color: 'var(--text-main)' }}>
+              Explore
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2.5 text-sm">
               <li>
-                <Link href="/" className="transition-opacity opacity-80 hover:opacity-100">
-                  Dashboard
+                <Link href="/blog" className="transition-opacity opacity-80 hover:opacity-100 flex items-center gap-2">
+                  <BookOpenIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
+                  <span>Blog Articles</span>
                 </Link>
               </li>
               <li>
-                <Link href="/journal/new" className="transition-opacity opacity-80 hover:opacity-100">
-                  New Journal Entry
+                <Link href="/projects" className="transition-opacity opacity-80 hover:opacity-100 flex items-center gap-2">
+                  <SparklesIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
+                  <span>Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/journal/entries" className="transition-opacity opacity-80 hover:opacity-100">
-                  My Entries
-                </Link>
-              </li>
-              <li>
-                <Link href="/journal/categories" className="transition-opacity opacity-80 hover:opacity-100">
-                  Categories & Tags
+                <Link href="/gallery" className="transition-opacity opacity-80 hover:opacity-100 flex items-center gap-2">
+                  <PhotoIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
+                  <span>Gallery</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Feature List */}
+          {/* Column 3: Architecture & Features */}
           <div className="space-y-3 font-theme-body">
-            <h3 className="font-bold uppercase tracking-widest opacity-60" style={{ color: 'var(--text-main)' }}>
-              Features
+            <h3 className="font-extrabold text-xs uppercase tracking-widest opacity-60" style={{ color: 'var(--text-main)' }}>
+              Tech Stack
             </h3>
-            <ul className="space-y-2 text-sm opacity-80">
-              <li>Block-Based Editor</li>
-              <li>Habit & Task Tracker</li>
-              <li>Custom Categories</li>
-              <li>Tag Auto-Creation</li>
-              <li>Writing Calendar</li>
+            <ul className="space-y-2.5 text-sm opacity-80">
+              <li className="flex items-center gap-2">⚡ FastAPI Backend</li>
+              <li className="flex items-center gap-2">⚛️ Next.js 14+ UI</li>
+              <li className="flex items-center gap-2">📝 Editor.js Blocks</li>
+              <li className="flex items-center gap-2">☁️ Cloudinary Storage</li>
             </ul>
           </div>
 
-          {/* Column 4: Insights & Source */}
+          {/* Column 4: Links & Source */}
           <div className="space-y-3 font-theme-body">
-            <h3 className="font-bold uppercase tracking-widest opacity-60" style={{ color: 'var(--text-main)' }}>
-              Insights & Source
+            <h3 className="font-extrabold text-xs uppercase tracking-widest opacity-60" style={{ color: 'var(--text-main)' }}>
+              Connect & Source
             </h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/analytics" className="transition-opacity opacity-80 hover:opacity-100">
-                  Rating Analytics
-                </Link>
-              </li>
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <a 
                   href="https://github.com" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="transition-opacity opacity-80 hover:opacity-100"
+                  className="transition-opacity opacity-80 hover:opacity-100 flex items-center gap-2"
                 >
-                  GitHub Repository
+                  <span>GitHub Repository</span>
                 </a>
+              </li>
+              <li>
+                <Link href="/editor/new" className="transition-opacity opacity-80 hover:opacity-100 flex items-center gap-2">
+                  <span>Author Dashboard</span>
+                </Link>
               </li>
             </ul>
           </div>
@@ -105,10 +102,10 @@ const Footer = () => {
 
         {/* Divider & Copyright */}
         <div 
-          className="border-t pt-6 mt-6 flex flex-col md:flex-row justify-between items-center font-theme-body gap-4 opacity-75"
+          className="border-t pt-6 mt-8 flex flex-col md:flex-row justify-between items-center font-theme-body gap-4 text-xs opacity-75"
           style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}
         >
-          <p>&copy; {new Date().getFullYear()} Softgenie Journal Platform. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Codewalk Blog Platform. Built with passion & code.</p>
           
           <div className="flex space-x-6">
             <Link href="/privacy" className="hover:opacity-100 transition-opacity">
