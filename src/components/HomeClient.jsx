@@ -7,12 +7,11 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import { 
   SparklesIcon, 
-  PencilSquareIcon, 
-  TagIcon, 
-  ChartBarIcon, 
-  ArrowRightIcon, 
   BookOpenIcon,
-  LightBulbIcon,
+  FolderIcon,
+  PhotoIcon, 
+  ArrowRightIcon, 
+  CodeBracketSquareIcon,
   ChevronLeftIcon,
   ChevronRightIcon
 } from "@heroicons/react/24/outline";
@@ -21,19 +20,19 @@ import 'aos/dist/aos.css';
 
 const sliderImages = [
   {
-    url: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=2070&q=80",
-    title: "Mindful Daily Introspection",
-    subtitle: "Write and reflect on your daily experiences."
+    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=2070&q=80",
+    title: "Crafting Clean Code & Software Stories",
+    subtitle: "Deep dives into software architecture, FastAPI backend engineering, and modern web development."
   },
   {
-    url: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=2075&q=80",
-    title: " Categorized and Structured Writing",
-    subtitle: "Organize your days across custom categories and habit tracking."
+    url: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=2075&q=80",
+    title: "Showcasing Technical Projects",
+    subtitle: "Explore full-stack applications, open-source tools, and interactive digital experiences."
   },
   {
-    url: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=2068&q=80",
-    title: "Track Growth Over Time",
-    subtitle: "Review past entries and visualize your personal progress with analytics."
+    url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=2068&q=80",
+    title: "Visual Snapshots & Moments",
+    subtitle: "A curated gallery of travel, desk setups, and creative captures through the lens."
   }
 ];
 
@@ -75,8 +74,8 @@ export default function HomeClient() {
       <Header />
 
       <main className="flex-grow">
-        {/* Hero Section with Unsplash Background Image Slider */}
-        <section className="relative overflow-hidden py-28 lg:py-40 px-6 flex items-center justify-center min-h-[700px]">
+        {/* Hero Section with Background Slider */}
+        <section className="relative overflow-hidden py-32 lg:py-44 px-6 flex items-center justify-center min-h-[720px]">
           
           <div className="absolute inset-0 z-0">
             {sliderImages.map((slide, index) => (
@@ -89,15 +88,15 @@ export default function HomeClient() {
                 <img 
                   src={slide.url} 
                   alt={slide.title} 
-                  className="w-full h-full object-cover object-center transform scale-105 filter brightness-75 dark:brightness-50"
+                  className="w-full h-full object-cover object-center transform scale-105 filter brightness-75 dark:brightness-[0.4]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/75 backdrop-blur-[2px]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 backdrop-blur-[2px]" />
               </div>
             ))}
           </div>
 
           <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] blur-[150px] rounded-full pointer-events-none opacity-30 z-20"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] blur-[160px] rounded-full pointer-events-none opacity-30 z-20"
             style={{ backgroundColor: 'var(--accent)' }}
           />
 
@@ -105,71 +104,69 @@ export default function HomeClient() {
             
             <div 
               data-aos="fade-down"
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-sm font-medium backdrop-blur-md shadow-lg"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs sm:text-sm font-bold backdrop-blur-md shadow-xl uppercase tracking-wider"
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderColor: 'rgba(255, 255, 255, 0.25)',
                 color: '#ffffff'
               }}
             >
               <SparklesIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
-              <span>{isAuthenticated && user ? `Welcome back, ${user.name || user.email || 'Friend'}!` : 'Mindfulness & Productivity Combined'}</span>
+              <span>{isAuthenticated && user ? `Welcome back, ${user.username || user.email || 'Author'}!` : 'Personal Digital Garden & Portfolio'}</span>
             </div>
 
             <div data-aos="fade-up" data-aos-delay="100" className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold font-theme-heading tracking-tight leading-tight text-white drop-shadow-md">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold font-theme-heading tracking-tight leading-tight text-white drop-shadow-lg">
                 {sliderImages[currentSlide].title}
               </h1>
-              <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed text-gray-200 drop-shadow">
+              <p className="text-base sm:text-xl max-w-2xl mx-auto leading-relaxed text-gray-200 drop-shadow font-theme-body opacity-90">
                 {sliderImages[currentSlide].subtitle}
               </p>
             </div>
 
             <div data-aos="fade-up" data-aos-delay="200" className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Link
-                href="/journal/new"
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-semibold font-theme-heading transition-all shadow-xl flex items-center justify-center gap-2 group hover:scale-105"
+                href="/blog"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold font-theme-heading transition-all shadow-xl flex items-center justify-center gap-2 group hover:scale-105"
                 style={{
                   backgroundColor: 'var(--accent)',
                   color: 'var(--bg-primary)',
                 }}
               >
-                <PencilSquareIcon className="h-5 w-5" />
-                <span>Write Today's Entry</span>
+                <BookOpenIcon className="h-5 w-5" />
+                <span>Read Articles</span>
                 <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
 
               <Link
-                href="/journal/entries"
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-semibold font-theme-heading border transition-all flex items-center justify-center gap-2 backdrop-blur-md text-white hover:bg-white/10"
+                href="/projects"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold font-theme-heading border transition-all flex items-center justify-center gap-2 backdrop-blur-md text-white hover:bg-white/10 shadow-lg"
                 style={{
                   borderColor: 'rgba(255, 255, 255, 0.3)',
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.35)',
                 }}
               >
-                <BookOpenIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
-                <span>Browse Past Entries</span>
+                <FolderIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
+                <span>View Projects</span>
               </Link>
 
-              {isAuthenticated && (
-                <Link
-                  href="/analytics"
-                  className="w-full sm:w-auto px-8 py-4 rounded-2xl font-semibold font-theme-heading border transition-all flex items-center justify-center gap-2 backdrop-blur-md text-white hover:bg-white/10"
-                  style={{
-                    borderColor: 'rgba(255, 255, 255, 0.3)',
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  }}
-                >
-                  <ChartBarIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
-                  <span>View Analytics</span>
-                </Link>
-              )}
+              <Link
+                href="/gallery"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold font-theme-heading border transition-all flex items-center justify-center gap-2 backdrop-blur-md text-white hover:bg-white/10 shadow-lg"
+                style={{
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.35)',
+                }}
+              >
+                <PhotoIcon className="h-5 w-5" style={{ color: 'var(--accent)' }} />
+                <span>Explore Gallery</span>
+              </Link>
             </div>
 
             <div className="flex items-center justify-center gap-6 pt-6">
               <button 
                 onClick={prevSlide}
-                className="p-2 rounded-full backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+                className="p-2.5 rounded-full backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-md"
                 aria-label="Previous slide"
               >
                 <ChevronLeftIcon className="h-5 w-5" />
@@ -180,8 +177,8 @@ export default function HomeClient() {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                      idx === currentSlide ? 'w-8 bg-[var(--accent)]' : 'w-2.5 bg-white/40 hover:bg-white/70'
+                    className={`h-2.5 rounded-full transition-all cursor-pointer shadow-sm ${
+                      idx === currentSlide ? 'w-9 bg-[var(--accent)]' : 'w-2.5 bg-white/40 hover:bg-white/70'
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
@@ -190,7 +187,7 @@ export default function HomeClient() {
 
               <button 
                 onClick={nextSlide}
-                className="p-2 rounded-full backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all cursor-pointer"
+                className="p-2.5 rounded-full backdrop-blur-md border border-white/20 text-white/80 hover:text-white hover:bg-white/20 transition-all cursor-pointer shadow-md"
                 aria-label="Next slide"
               >
                 <ChevronRightIcon className="h-5 w-5" />
@@ -200,7 +197,7 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* Features / Architecture Highlights Section */}
+        {/* 3 Core Platform Sections */}
         <section 
           className="py-24 px-6 border-t transition-colors"
           style={{
@@ -210,83 +207,109 @@ export default function HomeClient() {
         >
           <div className="max-w-7xl mx-auto space-y-16">
             <div className="text-center space-y-4" data-aos="fade-up">
-              <h2 className="text-3xl sm:text-4xl font-bold font-theme-heading">
-                Designed for maintaining a log of your daily experiences
+              <span className="text-xs uppercase font-extrabold tracking-widest px-3.5 py-1 rounded-full border shadow-sm" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}>
+                Platform Pillars
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold font-theme-heading">
+                Explore Codewalk's Main Sections
               </h2>
-              <p className="max-w-xl mx-auto opacity-80" style={{ color: 'var(--text-muted)' }}>
-                Everything you need to maintain a consistent journaling habit, tailored to your personal categories.
+              <p className="max-w-xl mx-auto opacity-80 text-sm sm:text-base font-theme-body" style={{ color: 'var(--text-muted)' }}>
+                Powered by a unified FastAPI content engine and block-based rich text editing.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              
+              {/* Blog Card */}
               <div 
                 data-aos="fade-up"
                 data-aos-delay="100"
-                className="p-8 rounded-3xl border space-y-4 transition-all hover:-translate-y-1 shadow-sm"
+                className="p-8 rounded-3xl border space-y-4 transition-all hover:-translate-y-1.5 shadow-md flex flex-col justify-between"
                 style={{
                   backgroundColor: 'var(--card-bg)',
                   borderColor: 'var(--border-color)',
                 }}
               >
-                <div 
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--accent)' }}
-                >
-                  <TagIcon className="h-6 w-6" />
+                <div className="space-y-4">
+                  <div 
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
+                    style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--accent)' }}
+                  >
+                    <BookOpenIcon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-2xl font-bold font-theme-heading">
+                    Blog Articles
+                  </h3>
+                  <p className="text-sm leading-relaxed opacity-80 font-theme-body" style={{ color: 'var(--text-muted)' }}>
+                    Technical deep-dives, developer logs, and tutorials written using Medium-style block content and integrated Cloudinary image uploads.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold font-theme-heading">
-                  Custom Categories
-                </h3>
-                <p className="text-sm leading-relaxed opacity-80" style={{ color: 'var(--text-muted)' }}>
-                  Track default system generated journal sections like Work, Health, and Family, or add custom tags like Friends or Hobbies with individual scores.
-                </p>
+                <Link href="/blog" className="inline-flex items-center gap-2 font-bold text-sm pt-2 group" style={{ color: 'var(--accent)' }}>
+                  <span>Browse Articles</span>
+                  <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
 
+              {/* Projects Card */}
               <div 
                 data-aos="fade-up"
                 data-aos-delay="200"
-                className="p-8 rounded-3xl border space-y-4 transition-all hover:-translate-y-1 shadow-sm"
+                className="p-8 rounded-3xl border space-y-4 transition-all hover:-translate-y-1.5 shadow-md flex flex-col justify-between"
                 style={{
                   backgroundColor: 'var(--card-bg)',
                   borderColor: 'var(--border-color)',
                 }}
               >
-                <div 
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--accent)' }}
-                >
-                  <LightBulbIcon className="h-6 w-6" />
+                <div className="space-y-4">
+                  <div 
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
+                    style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--accent)' }}
+                  >
+                    <FolderIcon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-2xl font-bold font-theme-heading">
+                    Projects Showcase
+                  </h3>
+                  <p className="text-sm leading-relaxed opacity-80 font-theme-body" style={{ color: 'var(--text-muted)' }}>
+                    A portfolio of software applications complete with live links, tech stacks, repository links, and architectural walkthroughs.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold font-theme-heading">
-                  Rich Text Editor
-                </h3>
-                <p className="text-sm leading-relaxed opacity-80" style={{ color: 'var(--text-muted)' }}>
-                  Express yourself cleanly using block-based rich text, multi-level headers, tables, quotes, and code snippets.
-                </p>
+                <Link href="/projects" className="inline-flex items-center gap-2 font-bold text-sm pt-2 group" style={{ color: 'var(--accent)' }}>
+                  <span>View Projects</span>
+                  <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
 
+              {/* Gallery Card */}
               <div 
                 data-aos="fade-up"
                 data-aos-delay="300"
-                className="p-8 rounded-3xl border space-y-4 transition-all hover:-translate-y-1 shadow-sm"
+                className="p-8 rounded-3xl border space-y-4 transition-all hover:-translate-y-1.5 shadow-md flex flex-col justify-between"
                 style={{
                   backgroundColor: 'var(--card-bg)',
                   borderColor: 'var(--border-color)',
                 }}
               >
-                <div 
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--accent)' }}
-                >
-                  <ChartBarIcon className="h-6 w-6" />
+                <div className="space-y-4">
+                  <div 
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
+                    style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--accent)' }}
+                  >
+                    <PhotoIcon className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-2xl font-bold font-theme-heading">
+                    Gallery Snapshots
+                  </h3>
+                  <p className="text-sm leading-relaxed opacity-80 font-theme-body" style={{ color: 'var(--text-muted)' }}>
+                    Visual moments, travel photography, and desktop setups captured and organized through cloud media storage.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold font-theme-heading">
-                  Rating Analytics
-                </h3>
-                <p className="text-sm leading-relaxed opacity-80" style={{ color: 'var(--text-muted)' }}>
-                  Visualize your category scores over time to discover trends, balance your routine, and make every day better.
-                </p>
+                <Link href="/gallery" className="inline-flex items-center gap-2 font-bold text-sm pt-2 group" style={{ color: 'var(--accent)' }}>
+                  <span>Explore Gallery</span>
+                  <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
+
             </div>
           </div>
         </section>

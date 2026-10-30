@@ -1,12 +1,12 @@
 import HomeClient from "@/components/HomeClient";
 
 export const metadata = {
-  title: 'Softgenie Journal | Capture Your Days, Reflect & Grow',
-  description: 'A flexible daily journal powered by custom categories, Medium-style block text prompts, and daily category ratings to help you understand your patterns.',
-  keywords: 'journal, daily log, mindfulness, productivity, habit tracking, rich text editor',
+  title: 'Codewalk | Personal Blog, Projects & Gallery',
+  description: 'A personal digital garden and portfolio showcasing software engineering articles, technical projects, and visual snapshots powered by FastAPI and Next.js.',
+  keywords: 'blog, software engineering, portfolio, projects, gallery, developer, web development, python, fastapi',
   openGraph: {
-    title: 'Softgenie Journal | Mindfulness & Productivity Combined',
-    description: 'Capture your days, reflect and grow with custom categories and structured daily logs.',
+    title: 'Codewalk | Personal Blog & Portfolio',
+    description: 'Explore technical write-ups, engineering projects, and photography snapshots.',
     type: 'website',
   },
 };
