@@ -10,11 +10,12 @@ import {
   CalendarDaysIcon, 
   EyeIcon, 
   TagIcon, 
-  FolderGit2Icon,
+  FolderIcon,
   LinkIcon,
   CodeBracketIcon,
   CpuChipIcon,
-  SparklesIcon
+  SparklesIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import AOS from 'aos';
@@ -37,8 +38,8 @@ export default function ProjectDetailClient({ slug }) {
     return (
       <div className="min-h-screen flex flex-col font-theme-body" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}>
         <Header />
-        <div className="flex-grow flex items-center justify-center py-32 opacity-60">
-          Loading project details...
+        <div className="flex-grow flex items-center justify-center py-32 opacity-60 font-medium">
+          Loading project showcase...
         </div>
         <Footer />
       </div>
@@ -49,10 +50,10 @@ export default function ProjectDetailClient({ slug }) {
     return (
       <div className="min-h-screen flex flex-col font-theme-body" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}>
         <Header />
-        <div className="flex-grow flex flex-col items-center justify-center py-32 space-y-4">
-          <FolderGit2Icon className="h-16 w-16 opacity-40" style={{ color: 'var(--accent)' }} />
+        <div className="flex-grow flex flex-col items-center justify-center py-32 space-y-4 px-4 text-center">
+          <FolderIcon className="h-16 w-16 opacity-40" style={{ color: 'var(--accent)' }} />
           <h2 className="text-2xl font-bold font-theme-heading">Project not found</h2>
-          <p className="opacity-70 text-sm">The project you are looking for does not exist or has been removed.</p>
+          <p className="opacity-70 text-sm max-w-md">The project you are looking for does not exist or has been removed.</p>
           <Link href="/projects" className="px-6 py-3 rounded-2xl font-extrabold text-sm transition-all shadow-md mt-2" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>
             Back to Projects
           </Link>
@@ -86,7 +87,7 @@ export default function ProjectDetailClient({ slug }) {
           </Link>
         </div>
 
-        {/* Project Header & Metadata Card */}
+        {/* Project Hero & Metadata Card */}
         <div 
           className="p-8 sm:p-10 rounded-3xl border shadow-xl backdrop-blur-xl space-y-6"
           style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
@@ -98,7 +99,7 @@ export default function ProjectDetailClient({ slug }) {
               <span>Project Showcase</span>
             </div>
 
-            <div className="flex items-center gap-4 text-xs opacity-75 font-theme-body">
+            <div className="flex flex-wrap items-center gap-4 text-xs opacity-75 font-theme-body">
               <span className="flex items-center gap-1.5"><CalendarDaysIcon className="h-4 w-4" /> {new Date(currentItem.date_posted).toLocaleDateString()}</span>
               <span>•</span>
               <span className="flex items-center gap-1.5"><EyeIcon className="h-4 w-4" /> {currentItem.views} views</span>
@@ -118,13 +119,13 @@ export default function ProjectDetailClient({ slug }) {
           </div>
 
           {/* Action Links (Live Demo & GitHub) */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <div className="flex flex-wrap items-center gap-3.5 pt-2">
             {projectLink && (
               <a
                 href={projectLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-3 rounded-2xl font-extrabold text-sm transition-all shadow-md flex items-center gap-2 hover:scale-105"
+                className="px-6 py-3.5 rounded-2xl font-extrabold text-sm transition-all shadow-lg flex items-center gap-2 hover:scale-105"
                 style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
               >
                 <LinkIcon className="h-4 w-4" />
@@ -136,7 +137,7 @@ export default function ProjectDetailClient({ slug }) {
                 href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-3 rounded-2xl font-extrabold text-sm transition-all border shadow-sm flex items-center gap-2 hover:opacity-100 opacity-90"
+                className="px-6 py-3.5 rounded-2xl font-extrabold text-sm transition-all border shadow-sm flex items-center gap-2 hover:opacity-100 opacity-90"
                 style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}
               >
                 <CodeBracketIcon className="h-4 w-4" />
@@ -145,55 +146,85 @@ export default function ProjectDetailClient({ slug }) {
             )}
           </div>
 
-          {/* Tech Stack Chips */}
-          {techStack.length > 0 && (
-            <div className="pt-4 border-t space-y-3" style={{ borderColor: 'var(--border-color)' }}>
-              <p className="text-xs font-extrabold uppercase tracking-widest opacity-60">Technologies & Architecture</p>
-              <div className="flex flex-wrap gap-2">
-                {techStack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-3 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider border shadow-sm flex items-center gap-1.5"
-                    style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}
-                  >
-                    <CpuChipIcon className="h-3.5 w-3.5" />
-                    {tech}
-                  </span>
-                ))}
+          {/* Tech Stack & Tags Section */}
+          <div className="pt-6 border-t space-y-4" style={{ borderColor: 'var(--border-color)' }}>
+            
+            {/* Technologies */}
+            {techStack.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-[11px] font-extrabold uppercase tracking-widest opacity-60">Technologies Used</p>
+                <div className="flex flex-wrap gap-2">
+                  {techStack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1.5 rounded-xl text-xs font-extrabold uppercase tracking-wider border shadow-sm flex items-center gap-1.5"
+                      style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}
+                    >
+                      <CpuChipIcon className="h-3.5 w-3.5" />
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* Project Tags */}
+            {currentItem.tags && currentItem.tags.length > 0 && (
+              <div className="space-y-2 pt-2">
+                <p className="text-[11px] font-extrabold uppercase tracking-widest opacity-60">Tags & Categories</p>
+                <div className="flex flex-wrap gap-2">
+                  {currentItem.tags.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="px-3 py-1 rounded-xl text-xs font-bold uppercase tracking-wider border shadow-sm flex items-center gap-1.5"
+                      style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}
+                    >
+                      <TagIcon className="h-3 w-3" style={{ color: 'var(--accent)' }} />
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
         </div>
 
         {/* Render Editor.js Block Content */}
         <div 
-          className="p-6 sm:p-10 rounded-3xl border shadow-xl backdrop-blur-xl space-y-6"
+          className="p-6 sm:p-12 rounded-3xl border shadow-xl backdrop-blur-xl space-y-6"
           style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
           data-aos="fade-up"
           data-aos-delay="100"
         >
-          <h3 className="text-xs font-extrabold uppercase tracking-widest opacity-60 pb-2 border-b" style={{ borderColor: 'var(--border-color)' }}>
-            Architecture & Implementation Guide
+          <h3 className="text-xs font-extrabold uppercase tracking-widest opacity-60 pb-3 border-b" style={{ borderColor: 'var(--border-color)' }}>
+            Project Architecture & Implementation Details
           </h3>
 
           {currentItem.content?.blocks?.map((block, index) => {
             switch (block.type) {
               case 'paragraph':
                 return (
-                  <p key={index} className="text-base leading-relaxed font-theme-body" style={{ color: 'var(--text-main)' }} dangerouslySetInnerHTML={{ __html: block.data.text }} />
+                  <p 
+                    key={index} 
+                    className="text-base sm:text-lg leading-relaxed font-theme-body" 
+                    style={{ color: 'var(--text-main)' }} 
+                    dangerouslySetInnerHTML={{ __html: block.data.text }} 
+                  />
                 );
 
               case 'header':
                 const Tag = `h${block.data.level || 3}`;
                 const headerClasses = block.data.level === 2 
-                  ? "text-2xl font-bold font-theme-heading mt-6 mb-2" 
-                  : "text-xl font-semibold font-theme-heading mt-4 mb-2";
+                  ? "text-2xl sm:text-3xl font-bold font-theme-heading mt-8 mb-4 tracking-tight" 
+                  : "text-xl sm:text-2xl font-semibold font-theme-heading mt-6 mb-3 tracking-tight";
                 return <Tag key={index} className={headerClasses} dangerouslySetInnerHTML={{ __html: block.data.text }} />;
 
               case 'list':
                 const ListTag = block.data.style === 'ordered' ? 'ol' : 'ul';
+                const listStyle = block.data.style === 'ordered' ? 'list-decimal' : 'list-disc';
                 return (
-                  <ListTag key={index} className="list-inside space-y-2 pl-4 font-theme-body text-base">
+                  <ListTag key={index} className={`${listStyle} list-inside space-y-2 pl-4 font-theme-body text-base sm:text-lg my-4`}>
                     {block.data.items.map((itemText, i) => (
                       <li key={i} dangerouslySetInnerHTML={{ __html: itemText }} />
                     ))}
@@ -205,16 +236,32 @@ export default function ProjectDetailClient({ slug }) {
                 const caption = block.data?.caption;
                 if (!imageUrl) return null;
                 return (
-                  <div key={index} className="space-y-2 my-6">
+                  <div key={index} className="space-y-3 my-8">
                     <div className="relative rounded-2xl overflow-hidden border shadow-md aspect-[16/9] w-full" style={{ borderColor: 'var(--border-color)' }}>
                       <img src={imageUrl} alt={caption || currentItem.title} className="object-cover w-full h-full" />
                     </div>
                     {caption && (
-                      <p className="text-center text-xs italic opacity-70 font-theme-body" style={{ color: 'var(--text-muted)' }}>
+                      <p className="text-center text-xs sm:text-sm italic opacity-75 font-theme-body" style={{ color: 'var(--text-muted)' }}>
                         {caption}
                       </p>
                     )}
                   </div>
+                );
+
+              case 'quote':
+                return (
+                  <blockquote 
+                    key={index} 
+                    className="p-6 rounded-2xl border-l-4 my-6 italic text-base sm:text-lg shadow-sm"
+                    style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--accent)', color: 'var(--text-main)' }}
+                  >
+                    <p dangerouslySetInnerHTML={{ __html: block.data.text }} />
+                    {block.data.caption && (
+                      <cite className="block text-xs font-bold uppercase tracking-widest mt-2 not-italic opacity-70">
+                        — {block.data.caption}
+                      </cite>
+                    )}
+                  </blockquote>
                 );
 
               default:

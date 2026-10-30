@@ -7,7 +7,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { 
   CodeBracketSquareIcon, 
   BookOpenIcon, 
-  FolderGit2Icon, 
+  FolderIcon, 
   PhotoIcon, 
   PlusCircleIcon,
   BellIcon,
@@ -166,7 +166,7 @@ const Header = () => {
           {/* Quick Create Button (If Authenticated) */}
           {isAuthenticated && (
             <Link
-              href="/editor/new"
+              href="/content/new"
               className="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-xl font-semibold text-sm transition-all hover:scale-105 shadow-sm"
               style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
             >
@@ -261,7 +261,7 @@ const Header = () => {
                   </div>
 
                   <Link
-                    href="/editor/new"
+                    href="/content/new"
                     className="w-full text-left px-4 py-2.5 font-medium text-sm flex items-center gap-2.5 transition-colors hover:bg-black/5 dark:hover:bg-white/5"
                     style={{ color: 'var(--text-main)' }}
                   >
@@ -390,7 +390,7 @@ const Header = () => {
           {isAuthenticated ? (
             <div className="pt-2 border-t space-y-1.5" style={{ borderColor: 'var(--border-color)' }}>
               <Link
-                href="/editor/new"
+                href="/content/new"
                 className="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium transition-colors"
                 style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
               >

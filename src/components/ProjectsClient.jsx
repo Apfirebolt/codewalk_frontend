@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useContentStore } from '@/store/useContentStore';
-import { SparklesIcon, FolderGit2Icon, LinkIcon, CodeBracketIcon, ArrowRightIcon, CpuChipIcon } from '@heroicons/react/24/outline';
+import { SparklesIcon, FolderIcon, LinkIcon, CodeBracketIcon, ArrowRightIcon, CpuChipIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -93,7 +93,7 @@ export default function ProjectsClient() {
         {/* Empty State */}
         {!loading && filteredItems.length === 0 && (
           <div className="text-center py-24 space-y-3 border rounded-3xl" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--card-bg)' }}>
-            <FolderGit2Icon className="h-12 w-12 mx-auto opacity-40" style={{ color: 'var(--accent)' }} />
+            <FolderIcon className="h-12 w-12 mx-auto opacity-40" style={{ color: 'var(--accent)' }} />
             <h3 className="text-lg font-bold font-theme-heading">No projects found</h3>
             <p className="text-sm opacity-70" style={{ color: 'var(--text-muted)' }}>Check back later or publish new projects from your author dashboard.</p>
           </div>
