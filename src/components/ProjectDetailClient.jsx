@@ -15,7 +15,7 @@ import {
   CodeBracketIcon,
   CpuChipIcon,
   SparklesIcon,
-  ClockIcon
+  LinkIcon as LinkIconOutline
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import AOS from 'aos';
@@ -262,6 +262,73 @@ export default function ProjectDetailClient({ slug }) {
                       </cite>
                     )}
                   </blockquote>
+                );
+
+              case 'table':
+                const contentRows = block.data?.content || [];
+                const withHeadings = block.data?.withHeadings;
+                return (
+                  <div key={index} className="overflow-x-auto my-6 border rounded-2xl" style={{ borderColor: 'var(--border-color)' }}>
+                    <table className="w-full text-left border-collapse text-sm sm:text-base">
+                      <tbody>
+                        {contentRows.map((row, rIdx) => {
+                          const isHeader = withHeadings && rIdx === 0;
+                          return (
+                            <tr key={rIdx} className={isHeader ? "border-b bg-black/5 dark:bg-white/5 font-extrabold" : "border-b"} style={{ borderColor: 'var(--border-color)' }}>
+                              {row.map((cell, cIdx) => {
+                                const CellTag = isHeader ? 'th' : 'td';
+                                return (
+                                  <CellTag key={cIdx} className="p-3.5" dangerouslySetInnerHTML={{ __html: cell }} />
+                                );
+                              })}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+
+              case 'code':
+                return (
+                  <div key={index} className="my-6 rounded-2xl overflow-hidden border shadow-inner bg-black/90 text-white font-mono text-xs sm:text-sm p-5 overflow-x-auto" style={{ borderColor: 'var(--border-color)' }}>
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 text-white/50 text-[11px] uppercase tracking-wider">
+                      <span className="flex items-center gap-1.5"><CodeBracketIcon className="h-4 w-4" /> Code Snippet</span>
+                    </div>
+                    <pre><code>{block.data.code}</code></pre>
+                  </div>
+                );
+
+              case 'linkTool':
+                const linkMeta = block.data?.meta || {};
+                const linkUrl = block.data?.link;
+                if (!linkUrl) return null;
+                return (
+                  <a
+                    key={index}
+                    href={linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 sm:p-5 rounded-2xl border transition-all hover:scale-[1.01] my-6 shadow-sm group"
+                    style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)' }}
+                  >
+                    <div className="flex items-start gap-4">
+                      {linkMeta.image?.url && (
+                        <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border" style={{ borderColor: 'var(--border-color)' }}>
+                          <img src={linkMeta.image.url} alt={linkMeta.title || 'Link thumbnail'} className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                      <div className="space-y-1 flex-grow">
+                        <div className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider opacity-60">
+                          <LinkIconOutline className="h-3 w-3" /> {new URL(linkUrl).hostname}
+                        </div>
+                        <h4 className="font-bold font-theme-heading text-base group-hover:underline">{linkMeta.title || linkUrl}</h4>
+                        {linkMeta.description && (
+                          <p className="text-xs opacity-75 line-clamp-2" style={{ color: 'var(--text-muted)' }}>{linkMeta.description}</p>
+                        )}
+                      </div>
+                    </div>
+                  </a>
                 );
 
               default:

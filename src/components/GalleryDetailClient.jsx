@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useContentStore } from '@/store/useContentStore';
@@ -12,14 +11,16 @@ import {
   TagIcon, 
   PhotoIcon,
   ArrowsPointingOutIcon,
-  XMarkIcon
+  XMarkIcon,
+  LinkIcon as LinkIconOutline,
+  CodeBracketIcon,
+  TableCellsIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 export default function GalleryDetailClient({ slug }) {
-  const router = useRouter();
   const { currentItem, fetchContentBySlug, clearCurrentItem, loading } = useContentStore();
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(null);
@@ -117,7 +118,7 @@ export default function GalleryDetailClient({ slug }) {
           )}
         </div>
 
-        {/* Render Editor.js Blocks (Images & Captions) */}
+        {/* Render Editor.js Blocks */}
         <div 
           className="p-6 sm:p-10 rounded-3xl border shadow-xl backdrop-blur-xl space-y-6"
           style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
@@ -166,6 +167,84 @@ export default function GalleryDetailClient({ slug }) {
                   ? "text-2xl font-bold font-theme-heading mt-6 mb-2" 
                   : "text-xl font-semibold font-theme-heading mt-4 mb-2";
                 return <Tag key={index} className={headerClasses} dangerouslySetInnerHTML={{ __html: block.data.text }} />;
+
+              case 'list':
+                const ListTag = block.data.style === 'ordered' ? 'ol' : 'ul';
+                const listStyle = block.data.style === 'ordered' ? 'list-decimal' : 'list-disc';
+                return (
+                  <ListTag key={index} className={`${listStyle} list-inside space-y-2 pl-4 font-theme-body text-base my-4`}>
+                    {block.data.items.map((itemText, i) => (
+                      <li key={i} dangerouslySetInnerHTML={{ __html: itemText }} />
+                    ))}
+                  </ListTag>
+                );
+
+              case 'table':
+                const contentRows = block.data?.content || [];
+                const withHeadings = block.data?.withHeadings;
+                return (
+                  <div key={index} className="overflow-x-auto my-6 border rounded-2xl" style={{ borderColor: 'var(--border-color)' }}>
+                    <table className="w-full text-left border-collapse text-sm">
+                      <tbody>
+                        {contentRows.map((row, rIdx) => {
+                          const isHeader = withHeadings && rIdx === 0;
+                          return (
+                            <tr key={rIdx} className={isHeader ? "border-b bg-black/5 dark:bg-white/5 font-extrabold" : "border-b"} style={{ borderColor: 'var(--border-color)' }}>
+                              {row.map((cell, cIdx) => {
+                                const CellTag = isHeader ? 'th' : 'td';
+                                return (
+                                  <CellTag key={cIdx} className="p-3.5" dangerouslySetInnerHTML={{ __html: cell }} />
+                                );
+                              })}
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+
+              case 'code':
+                return (
+                  <div key={index} className="my-6 rounded-2xl overflow-hidden border shadow-inner bg-black/90 text-white font-mono text-xs sm:text-sm p-5 overflow-x-auto" style={{ borderColor: 'var(--border-color)' }}>
+                    <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 text-white/50 text-[11px] uppercase tracking-wider">
+                      <span className="flex items-center gap-1.5"><CodeBracketIcon className="h-4 w-4" /> Code Snippet</span>
+                    </div>
+                    <pre><code>{block.data.code}</code></pre>
+                  </div>
+                );
+
+              case 'linkTool':
+                const linkMeta = block.data?.meta || {};
+                const linkUrl = block.data?.link;
+                if (!linkUrl) return null;
+                return (
+                  <a
+                    key={index}
+                    href={linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 sm:p-5 rounded-2xl border transition-all hover:scale-[1.01] my-6 shadow-sm group"
+                    style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)' }}
+                  >
+                    <div className="flex items-start gap-4">
+                      {linkMeta.image?.url && (
+                        <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border" style={{ borderColor: 'var(--border-color)' }}>
+                          <img src={linkMeta.image.url} alt={linkMeta.title || 'Link thumbnail'} className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                      <div className="space-y-1 flex-grow">
+                        <div className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider opacity-60">
+                          <LinkIconOutline className="h-3 w-3" /> {new URL(linkUrl).hostname}
+                        </div>
+                        <h4 className="font-bold font-theme-heading text-base group-hover:underline">{linkMeta.title || linkUrl}</h4>
+                        {linkMeta.description && (
+                          <p className="text-xs opacity-75 line-clamp-2" style={{ color: 'var(--text-muted)' }}>{linkMeta.description}</p>
+                        )}
+                      </div>
+                    </div>
+                  </a>
+                );
 
               default:
                 return null;

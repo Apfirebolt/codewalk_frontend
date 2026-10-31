@@ -29,42 +29,70 @@ export default function EditorJsWrapper({ onChange, initialData }) {
               if (!isMounted) return;
               const List = ListModule.default;
 
-              // Final check before instantiating
-              if (!containerRef.current || editorInstance.current) return;
+              import('@editorjs/table').then((TableModule) => {
+                if (!isMounted) return;
+                const Table = TableModule.default;
 
-              const editor = new EditorJS({
-                holder: containerRef.current,
-                data: initialData || {},
-                placeholder: 'Start writing your story or notes here...',
-                tools: {
-                  header: {
-                    class: Header,
-                    inlineToolbar: true,
-                    config: { levels: [2, 3, 4], defaultLevel: 2 }
-                  },
-                  list: {
-                    class: List,
-                    inlineToolbar: true,
-                  },
-                  image: {
-                    class: ImageTool,
-                    config: {
-                      uploader: {
-                        async uploadByFile(file) {
-                          const result = await uploadImage(file);
-                          return result; // Expected format: { success: 1, file: { url: "..." } }
+                import('@editorjs/code').then((CodeModule) => {
+                  if (!isMounted) return;
+                  const CodeTool = CodeModule.default;
+
+                  import('@editorjs/link').then((LinkModule) => {
+                    if (!isMounted) return;
+                    const LinkTool = LinkModule.default;
+
+                    // Final check before instantiating
+                    if (!containerRef.current || editorInstance.current) return;
+
+                    const editor = new EditorJS({
+                      holder: containerRef.current,
+                      data: initialData || {},
+                      placeholder: 'Start writing your story or notes here...',
+                      tools: {
+                        header: {
+                          class: Header,
+                          inlineToolbar: true,
+                          config: { levels: [2, 3, 4], defaultLevel: 2 }
+                        },
+                        list: {
+                          class: List,
+                          inlineToolbar: true,
+                        },
+                        image: {
+                          class: ImageTool,
+                          config: {
+                            uploader: {
+                              async uploadByFile(file) {
+                                const result = await uploadImage(file);
+                                return result; // Expected format: { success: 1, file: { url: "..." } }
+                              }
+                            }
+                          }
+                        },
+                        table: {
+                          class: Table,
+                          inlineToolbar: true,
+                        },
+                        code: {
+                          class: CodeTool,
+                        },
+                        linkTool: {
+                          class: LinkTool,
+                          config: {
+                            endpoint: '/api/content/fetch-url', // Optional endpoint if you have a backend metadata fetcher, or leave blank if client handles it
+                          }
                         }
-                      }
-                    }
-                  }
-                },
-                async onChange(api) {
-                  const content = await api.saver.save();
-                  onChange(content);
-                },
-              });
+                      },
+                      async onChange(api) {
+                        const content = await api.saver.save();
+                        onChange(content);
+                      },
+                    });
 
-              editorInstance.current = editor;
+                    editorInstance.current = editor;
+                  });
+                });
+              });
             });
           });
         });

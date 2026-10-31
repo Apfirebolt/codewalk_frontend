@@ -1,17 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useContentStore } from '@/store/useContentStore';
-import { PhotoIcon, EyeIcon, CalendarDaysIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon, EyeIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 export default function GalleryClient() {
   const { items, fetchContent, loading } = useContentStore();
   const [selectedTag, setSelectedTag] = useState('all');
-  const [activeImageModal, setActiveImageModal] = useState(null);
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
@@ -101,10 +101,10 @@ export default function GalleryClient() {
             if (!coverImage) return null; // Skip if no image block found
 
             return (
-              <div
+              <Link
                 key={item.id}
-                onClick={() => setActiveImageModal({ url: coverImage, title: item.title, description: item.meta_description })}
-                className="group relative rounded-3xl overflow-hidden border shadow-md cursor-pointer transition-all hover:-translate-y-1.5 hover:shadow-2xl"
+                href={`/gallery/${item.slug}`}
+                className="group relative rounded-3xl overflow-hidden border shadow-md cursor-pointer transition-all hover:-translate-y-1.5 hover:shadow-2xl block"
                 style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -124,47 +124,12 @@ export default function GalleryClient() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
 
       </main>
-
-      {/* Interactive Lightbox Modal */}
-      {activeImageModal && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
-          onClick={() => setActiveImageModal(null)}
-        >
-          <div 
-            className="relative max-w-4xl w-full rounded-3xl overflow-hidden border shadow-2xl p-4 sm:p-6 space-y-4"
-            style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-extrabold font-theme-heading">{activeImageModal.title}</h3>
-              <button
-                onClick={() => setActiveImageModal(null)}
-                className="p-2 rounded-full border transition-all hover:scale-110 cursor-pointer"
-                style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--bg-primary)' }}
-              >
-                <XMarkIcon className="h-5 w-5" />
-              </button>
-            </div>
-            
-            <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--border-color)' }}>
-              <img src={activeImageModal.url} alt={activeImageModal.title} className="object-contain w-full h-full bg-black/40" />
-            </div>
-
-            {activeImageModal.description && (
-              <p className="text-sm opacity-80 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                {activeImageModal.description}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
 
       <Footer />
     </div>
