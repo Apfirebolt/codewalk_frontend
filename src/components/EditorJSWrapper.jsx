@@ -1,38 +1,46 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useContentStore } from '@/store/useContentStore';
 
 export default function EditorJsWrapper({ onChange, initialData }) {
-  const ref = useRef(null);
+  const containerRef = useRef(null);
   const editorInstance = useRef(null);
+  const uploadImage = useContentStore((state) => state.uploadImage);
 
   useEffect(() => {
-    // Dynamically import Editor.js on client side only
-    if (!editorInstance.current) {
+    let isMounted = true;
+
+    // Only initialize if container exists and editor instance is not already created
+    if (containerRef.current && !editorInstance.current) {
       import('@editorjs/editorjs').then((EditorJSModule) => {
+        if (!isMounted) return;
         const EditorJS = EditorJSModule.default;
         
         import('@editorjs/header').then((HeaderModule) => {
+          if (!isMounted) return;
           const Header = HeaderModule.default;
           
           import('@editorjs/image').then((ImageModule) => {
+            if (!isMounted) return;
             const ImageTool = ImageModule.default;
             
             import('@editorjs/list').then((ListModule) => {
+              if (!isMounted) return;
               const List = ListModule.default;
 
+              // Final check before instantiating
+              if (!containerRef.current || editorInstance.current) return;
+
               const editor = new EditorJS({
-                holder: ref.current,
+                holder: containerRef.current,
                 data: initialData || {},
                 placeholder: 'Start writing your story or notes here...',
                 tools: {
                   header: {
                     class: Header,
                     inlineToolbar: true,
-                    config: {
-                      levels: [2, 3, 4],
-                      defaultLevel: 2
-                    }
+                    config: { levels: [2, 3, 4], defaultLevel: 2 }
                   },
                   list: {
                     class: List,
@@ -43,25 +51,8 @@ export default function EditorJsWrapper({ onChange, initialData }) {
                     config: {
                       uploader: {
                         async uploadByFile(file) {
-                          const formData = new FormData();
-                          formData.append('file', file);
-                          formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'your_preset');
-
-                          try {
-                            // Direct upload to Cloudinary or your backend proxy
-                            const response = await fetch(
-                              `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'your_cloud'}/image/upload`,
-                              { method: 'POST', body: formData }
-                            );
-                            const data = await response.json();
-                            return {
-                              success: 1,
-                              file: { url: data.secure_url }
-                            };
-                          } catch (error) {
-                            console.error('Image upload failed:', error);
-                            return { success: 0 };
-                          }
+                          const result = await uploadImage(file);
+                          return result; // Expected format: { success: 1, file: { url: "..." } }
                         }
                       }
                     }
@@ -81,22 +72,20 @@ export default function EditorJsWrapper({ onChange, initialData }) {
     }
 
     return () => {
+      isMounted = false;
       if (editorInstance.current && typeof editorInstance.current.destroy === 'function') {
         editorInstance.current.destroy();
         editorInstance.current = null;
       }
     };
-  }, []);
+  }, [uploadImage]); // Exclude initialData to prevent re-triggering on state changes
 
   return (
     <div 
       className="p-6 sm:p-8 rounded-3xl border shadow-sm min-h-[400px]"
-      style={{
-        backgroundColor: 'var(--bg-primary)',
-        borderColor: 'var(--border-color)',
-      }}
+      style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)' }}
     >
-      <div id="editorjs" ref={ref} className="prose max-w-none" />
+      <div ref={containerRef} className="prose max-w-none" />
     </div>
   );
 }

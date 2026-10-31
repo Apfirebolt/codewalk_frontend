@@ -108,6 +108,27 @@ export const useContentStore = create((set, get) => ({
     }
   },
 
+  // Upload inline image via FastAPI backend (/content/upload-image)
+  uploadImage: async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await httpClient.post('/content/upload-image', formData, {
+        headers: {
+          ...getAuthHeaders().headers,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Returns Editor.js expected structure: { success: 1, file: { url: "..." } }
+      return res.data;
+    } catch (err) {
+      console.error("Image upload error:", err);
+      return { success: 0 };
+    }
+  },
+
   // Clear current item (useful when unmounting editor)
   clearCurrentItem: () => set({ currentItem: null }),
 }));
