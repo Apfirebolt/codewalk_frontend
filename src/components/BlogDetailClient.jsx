@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useContentStore } from '@/store/useContentStore';
+import Cookie from 'js-cookie';
 import { 
   ArrowLeftIcon, 
   CalendarDaysIcon, 
@@ -13,24 +14,233 @@ import {
   BookOpenIcon,
   ClockIcon,
   CodeBracketIcon,
-  LinkIcon as LinkIconOutline
+  LinkIcon as LinkIconOutline,
+  ChatBubbleLeftRightIcon,
+  PaperAirplaneIcon,
+  PencilSquareIcon,
+  TrashIcon,
+  ArrowUturnLeftIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+// --- Recursive Comment Item Component ---
+function CommentItem({ comment, contentId, currentUserId, onReply, onEdit, onDelete }) {
+  const [isReplying, setIsReplying] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [replyBody, setReplyBody] = useState('');
+  const [editBody, setEditBody] = useState(comment.body);
+  const [submitting, setSubmitting] = useState(false);
+
+  const isOwner = currentUserId === comment.user_id;
+
+  const handlePostReply = async (e) => {
+    e.preventDefault();
+    if (!replyBody.trim()) return;
+    setSubmitting(true);
+    await onReply(comment.id, replyBody);
+    setReplyBody('');
+    setIsReplying(false);
+    setSubmitting(false);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!editBody.trim()) return;
+    setSubmitting(true);
+    await onEdit(comment.id, editBody);
+    setIsEditing(false);
+    setSubmitting(false);
+  };
+
+  return (
+    <div className="space-y-4 pt-4 first:pt-0">
+      <div 
+        className="p-5 rounded-2xl border shadow-sm space-y-3"
+        style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)' }}
+      >
+        {/* Comment Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full overflow-hidden border flex items-center justify-center font-bold text-xs uppercase" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--card-bg)', color: 'var(--accent)' }}>
+              {comment.user?.profile_image ? (
+                <img src={comment.user.profile_image} alt={comment.user.username} className="w-full h-full object-cover" />
+              ) : (
+                (comment.user?.username?.[0] || 'U')
+              )}
+            </div>
+            <div>
+              <h5 className="font-bold text-xs font-theme-heading">
+                {comment.user?.first_name ? `${comment.user.first_name} ${comment.user.last_name || ''}` : (comment.user?.username || 'Anonymous')}
+              </h5>
+              <span className="text-[10px] opacity-60">
+                {new Date(comment.date_created).toLocaleDateString()} {comment.is_edited && '(edited)'}
+              </span>
+            </div>
+          </div>
+
+          {/* Owner Actions */}
+          {isOwner && (
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setIsEditing(!isEditing)}
+                className="p-1.5 rounded-lg border opacity-70 hover:opacity-100 transition-opacity"
+                style={{ borderColor: 'var(--border-color)' }}
+                title="Edit comment"
+              >
+                <PencilSquareIcon className="h-3.5 w-3.5" />
+              </button>
+              <button 
+                onClick={() => onDelete(comment.id)}
+                className="p-1.5 rounded-lg border opacity-70 hover:opacity-100 text-rose-500 transition-opacity"
+                style={{ borderColor: 'var(--border-color)' }}
+                title="Delete comment"
+              >
+                <TrashIcon className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Comment Body / Edit Form */}
+        {isEditing ? (
+          <form onSubmit={handleUpdate} className="space-y-3 pt-2">
+            <textarea
+              value={editBody}
+              onChange={(e) => setEditBody(e.target.value)}
+              rows={2}
+              className="w-full p-3 rounded-xl border text-sm focus:outline-none focus:ring-2"
+              style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}
+              required
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold border"
+                style={{ borderColor: 'var(--border-color)' }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="px-3 py-1.5 rounded-xl text-xs font-extrabold"
+                style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className="text-sm leading-relaxed opacity-90 font-theme-body" style={{ color: 'var(--text-main)' }}>
+            {comment.body}
+          </p>
+        )}
+
+        {/* Reply Action Trigger */}
+        {!isEditing && (
+          <div className="flex justify-end pt-1">
+            <button
+              onClick={() => setIsReplying(!isReplying)}
+              className="inline-flex items-center gap-1.5 text-xs font-bold opacity-75 hover:opacity-100 transition-opacity"
+              style={{ color: 'var(--accent)' }}
+            >
+              <ArrowUturnLeftIcon className="h-3.5 w-3.5" /> Reply
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Reply Input Box */}
+      {isReplying && (
+        <form onSubmit={handlePostReply} className="ml-6 sm:ml-10 space-y-3 p-4 rounded-2xl border shadow-sm" style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)' }}>
+          <textarea
+            value={replyBody}
+            onChange={(e) => setReplyBody(e.target.value)}
+            placeholder={`Replying to @${comment.user?.username || 'user'}...`}
+            rows={2}
+            className="w-full p-3 rounded-xl border text-sm focus:outline-none focus:ring-2"
+            style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}
+            required
+          />
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setIsReplying(false)}
+              className="px-3 py-1.5 rounded-xl text-xs font-bold border"
+              style={{ borderColor: 'var(--border-color)' }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="px-4 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1"
+              style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+            >
+              <PaperAirplaneIcon className="h-3.5 w-3.5" /> Post Reply
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Nested Child Replies Recursion */}
+      {comment.replies && comment.replies.length > 0 && (
+        <div className="ml-6 sm:ml-10 pl-4 border-l-2 space-y-4" style={{ borderColor: 'var(--border-color)' }}>
+          {comment.replies.map((reply) => (
+            <CommentItem 
+              key={reply.id} 
+              comment={reply} 
+              contentId={contentId} 
+              currentUserId={currentUserId}
+              onReply={onReply}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// --- Main Blog Detail Client Component ---
 export default function BlogDetailClient({ slug }) {
   const router = useRouter();
-  const { currentItem, fetchContentBySlug, clearCurrentItem, loading } = useContentStore();
+  const { currentItem, comments, fetchContentBySlug, fetchComments, createComment, updateComment, deleteComment, clearCurrentItem, loading } = useContentStore();
+  
+  const [newCommentBody, setNewCommentBody] = useState('');
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
-    fetchContentBySlug(slug);
+    
+    // Decode user ID from token cookie if available
+    const token = Cookie.get('token');
+    if (token) {
+      try {
+        const base64Payload = token.split('.')[1];
+        const payload = JSON.parse(atob(base64Payload));
+        setCurrentUserId(payload.id || payload.sub);
+      } catch (e) {
+        console.error("Failed to decode auth token:", e);
+      }
+    }
+
+    fetchContentBySlug(slug).then((res) => {
+      if (res.success && res.data?.id) {
+        fetchComments(res.data.id);
+      }
+    });
 
     return () => {
       clearCurrentItem();
     };
-  }, [slug, fetchContentBySlug, clearCurrentItem]);
+  }, [slug, fetchContentBySlug, fetchComments, clearCurrentItem]);
 
   // Estimate reading time based on block text length
   const estimateReadTime = (content) => {
@@ -45,7 +255,30 @@ export default function BlogDetailClient({ slug }) {
     return `${Math.max(1, minutes)} min read`;
   };
 
-  if (loading) {
+  const handlePostTopComment = async (e) => {
+    e.preventDefault();
+    if (!newCommentBody.trim() || !currentItem) return;
+    setSubmittingComment(true);
+    await createComment(currentItem.id, { body: newCommentBody, parent_id: null });
+    setNewCommentBody('');
+    setSubmittingComment(false);
+  };
+
+  const handleReplyToComment = async (parentId, body) => {
+    await createComment(currentItem.id, { body, parent_id: parentId });
+  };
+
+  const handleEditComment = async (commentId, body) => {
+    await updateComment(commentId, currentItem.id, { body });
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (window.confirm("Are you sure you want to delete this comment?")) {
+      await deleteComment(commentId, currentItem.id);
+    }
+  };
+
+  if (loading && !currentItem) {
     return (
       <div className="min-h-screen flex flex-col font-theme-body" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}>
         <Header />
@@ -83,7 +316,7 @@ export default function BlogDetailClient({ slug }) {
     >
       <Header />
 
-      <main className="flex-grow max-w-4xl mx-auto w-full px-4 sm:px-6 py-12 space-y-8">
+      <main className="flex-grow max-w-4xl mx-auto w-full px-4 sm:px-6 py-12 space-y-12">
         
         {/* Back Navigation */}
         <div data-aos="fade-down">
@@ -274,6 +507,63 @@ export default function BlogDetailClient({ slug }) {
                 return null;
             }
           })}
+        </div>
+
+        {/* --- COMMENTS SECTION --- */}
+        <div 
+          className="p-6 sm:p-10 rounded-3xl border shadow-xl backdrop-blur-xl space-y-8"
+          style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
+          data-aos="fade-up"
+        >
+          <div className="flex items-center gap-3 pb-4 border-b" style={{ borderColor: 'var(--border-color)' }}>
+            <ChatBubbleLeftRightIcon className="h-6 w-6" style={{ color: 'var(--accent)' }} />
+            <h3 className="text-xl font-bold font-theme-heading">
+              Discussion ({comments.reduce((acc, c) => acc + 1 + (c.replies ? c.replies.length : 0), 0)})
+            </h3>
+          </div>
+
+          {/* New Comment Form */}
+          <form onSubmit={handlePostTopComment} className="space-y-3">
+            <textarea
+              value={newCommentBody}
+              onChange={(e) => setNewCommentBody(e.target.value)}
+              placeholder="Share your thoughts or ask a question..."
+              rows={3}
+              className="w-full p-4 rounded-2xl border text-sm focus:outline-none focus:ring-2 shadow-sm"
+              style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--text-main)' }}
+              required
+            />
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={submittingComment}
+                className="px-6 py-3 rounded-2xl font-extrabold text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer hover:opacity-90 disabled:opacity-50"
+                style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+              >
+                <PaperAirplaneIcon className="h-4 w-4" />
+                <span>{submittingComment ? 'Posting...' : 'Post Comment'}</span>
+              </button>
+            </div>
+          </form>
+
+          {/* Comments List / Tree */}
+          <div className="space-y-6 pt-4 divide-y" style={{ borderColor: 'var(--border-color)' }}>
+            {comments.length === 0 ? (
+              <p className="text-sm opacity-60 text-center py-8">No comments yet. Be the first to share your thoughts!</p>
+            ) : (
+              comments.map((comment) => (
+                <CommentItem 
+                  key={comment.id}
+                  comment={comment}
+                  contentId={currentItem.id}
+                  currentUserId={currentUserId}
+                  onReply={handleReplyToComment}
+                  onEdit={handleEditComment}
+                  onDelete={handleDeleteComment}
+                />
+              ))
+            )}
+          </div>
         </div>
 
       </main>

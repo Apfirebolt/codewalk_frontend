@@ -11,6 +11,7 @@ const getAuthHeaders = () => {
 export const useContentStore = create((set, get) => ({
   items: [],              // List of all fetched content items
   currentItem: null,      // Single content item loaded by slug (for reading/editing)
+  comments: [],           // Comments tree for the currently viewed content item
   loading: false,         // Loading state for async requests
   error: null,            // Error messages
 
@@ -44,14 +45,12 @@ export const useContentStore = create((set, get) => ({
   },
 
   // Create a new content item (Blog, Project, or Gallery)
-  // payload format: { title, content_type, content (Editor.js JSON), extra_metadata, tag_names, meta_title, meta_description, is_published }
   createContent: async (payload) => {
     set({ loading: true, error: null });
     try {
       const res = await httpClient.post('/content/', payload, getAuthHeaders());
       const newItem = res.data;
 
-      // Prepend to current items list if loaded
       set((state) => ({
         items: [newItem, ...state.items],
         loading: false,
@@ -121,7 +120,6 @@ export const useContentStore = create((set, get) => ({
         },
       });
 
-      // Returns Editor.js expected structure: { success: 1, file: { url: "..." } }
       return res.data;
     } catch (err) {
       console.error("Image upload error:", err);
@@ -129,6 +127,58 @@ export const useContentStore = create((set, get) => ({
     }
   },
 
-  // Clear current item (useful when unmounting editor)
-  clearCurrentItem: () => set({ currentItem: null }),
+  // --- COMMENT CRUD OPERATIONS ---
+
+  // Fetch all comments (and nested reply trees) for a specific content item ID
+  fetchComments: async (contentId) => {
+    try {
+      const res = await httpClient.get(`/content/${contentId}/comments`);
+      set({ comments: res.data });
+      return { success: true, data: res.data };
+    } catch (err) {
+      const errorMsg = err.response?.data?.detail || err.message || "Failed to fetch comments.";
+      console.error(errorMsg);
+      return { success: false, error: errorMsg };
+    }
+  },
+
+  // Post a new comment or nested reply ({ body, parent_id })
+  createComment: async (contentId, payload) => {
+    try {
+      const res = await httpClient.post(`/content/${contentId}/comments`, payload, getAuthHeaders());
+      // Re-fetch comments to cleanly reconstruct the nested reply tree
+      await get().fetchComments(contentId);
+      return { success: true, data: res.data };
+    } catch (err) {
+      const errorMsg = err.response?.data?.detail || err.message || "Failed to post comment.";
+      return { success: false, error: errorMsg };
+    }
+  },
+
+  // Update an existing comment body ({ body })
+  updateComment: async (commentId, contentId, payload) => {
+    try {
+      const res = await httpClient.put(`/content/comments/${commentId}`, payload, getAuthHeaders());
+      await get().fetchComments(contentId);
+      return { success: true, data: res.data };
+    } catch (err) {
+      const errorMsg = err.response?.data?.detail || err.message || "Failed to update comment.";
+      return { success: false, error: errorMsg };
+    }
+  },
+
+  // Delete a comment by ID
+  deleteComment: async (commentId, contentId) => {
+    try {
+      await httpClient.delete(`/content/comments/${commentId}`, getAuthHeaders());
+      await get().fetchComments(contentId);
+      return { success: true };
+    } catch (err) {
+      const errorMsg = err.response?.data?.detail || err.message || "Failed to delete comment.";
+      return { success: false, error: errorMsg };
+    }
+  },
+
+  // Clear current item and comments (useful when unmounting detail views)
+  clearCurrentItem: () => set({ currentItem: null, comments: [] }),
 }));
