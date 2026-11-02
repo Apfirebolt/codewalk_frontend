@@ -211,16 +211,32 @@ export default function BlogDetailClient({ slug }) {
                   : "text-xl sm:text-2xl font-semibold font-theme-heading mt-6 mb-3 tracking-tight";
                 return <Tag key={index} className={headerClasses} dangerouslySetInnerHTML={{ __html: block.data.text }} />;
 
-              case 'list':
+              case 'list': {
                 const ListTag = block.data.style === 'ordered' ? 'ol' : 'ul';
                 const listStyle = block.data.style === 'ordered' ? 'list-decimal' : 'list-disc';
+                const renderItems = (items) => {
+                  return (items || []).map((item, i) => {
+                    const text = typeof item === 'string' ? item : (item?.content ?? item?.text ?? '');
+                    const subItems = item?.items;
+                    return (
+                      <li key={i} className="leading-relaxed">
+                        <span dangerouslySetInnerHTML={{ __html: text }} />
+                        {Array.isArray(subItems) && subItems.length > 0 && (
+                          <ListTag className={`${listStyle} list-inside space-y-2 pl-4 my-2`}>
+                            {renderItems(subItems)}
+                          </ListTag>
+                        )}
+                      </li>
+                    );
+                  });
+                };
+
                 return (
                   <ListTag key={index} className={`${listStyle} list-inside space-y-2 pl-4 font-theme-body text-base sm:text-lg my-4`}>
-                    {block.data.items.map((itemText, i) => (
-                      <li key={i} dangerouslySetInnerHTML={{ __html: itemText }} />
-                    ))}
+                    {renderItems(block.data.items)}
                   </ListTag>
                 );
+              }
 
               case 'image':
                 const imageUrl = block.data?.file?.url;
