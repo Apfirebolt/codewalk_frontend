@@ -8,10 +8,12 @@ import ContentMetadataForm from '@/components/ContentMetadataForm';
 import ProjectMetadataInputs from '@/components/ProjectMetadataForm';
 import EditorJsWrapper from '@/components/EditorJSWrapper';
 import { useContentStore } from '@/store/useContentStore';
+import { useRequireAdmin } from '@/hooks/useRequireAdmin';
 import { ArrowLeftIcon, CheckIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function NewPostPage() {
+  const { isAdmin, isLoading: authLoading } = useRequireAdmin();
   const router = useRouter();
   const { createContent, loading } = useContentStore();
 
@@ -26,6 +28,25 @@ export default function NewPostPage() {
   });
 
   const [errors, setErrors] = useState({});
+
+  // Block rendering until auth verification finishes
+  if (authLoading) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center font-theme-body"
+        style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}
+      >
+        <p className="text-sm font-bold animate-pulse" style={{ color: 'var(--accent)' }}>
+          Verifying admin access...
+        </p>
+      </div>
+    );
+  }
+
+  // Prevent flash of content if user is unauthorized
+  if (!isAdmin) {
+    return null;
+  }
 
   const handleFieldChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

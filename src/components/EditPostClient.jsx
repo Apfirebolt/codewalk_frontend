@@ -8,10 +8,12 @@ import ContentMetadataForm from '@/components/ContentMetadataForm';
 import ProjectMetadataInputs from '@/components/ProjectMetadataForm';
 import EditorJsWrapper from '@/components/EditorJSWrapper';
 import { useContentStore } from '@/store/useContentStore';
+import { useRequireAdmin } from '@/hooks/useRequireAdmin';
 import { ArrowLeftIcon, CheckIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default function EditPostClient({ id }) {
+  const { isAdmin, isLoading: authLoading } = useRequireAdmin();
   const router = useRouter();
   const { items, fetchContent, updateContent, loading } = useContentStore();
 
@@ -30,6 +32,8 @@ export default function EditPostClient({ id }) {
 
   // Fetch items if not already loaded, then find the specific item by ID
   useEffect(() => {
+    if (!isAdmin) return;
+
     const loadItem = async () => {
       if (items.length === 0) {
         await fetchContent();
@@ -37,7 +41,7 @@ export default function EditPostClient({ id }) {
       setFetching(false);
     };
     loadItem();
-  }, [items, fetchContent]);
+  }, [isAdmin, items, fetchContent]);
 
   // Pre-fill form when items are available
   useEffect(() => {
@@ -56,6 +60,25 @@ export default function EditPostClient({ id }) {
       }
     }
   }, [items, id]);
+
+  // Block rendering until auth verification finishes
+  if (authLoading) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center font-theme-body"
+        style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}
+      >
+        <p className="text-sm font-bold animate-pulse" style={{ color: 'var(--accent)' }}>
+          Verifying admin access...
+        </p>
+      </div>
+    );
+  }
+
+  // Prevent flash of content if user is unauthorized
+  if (!isAdmin) {
+    return null;
+  }
 
   const handleFieldChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

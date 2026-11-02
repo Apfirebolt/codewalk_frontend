@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import httpClient from '@/lib/api';
 import Cookie from 'js-cookie';
 
-// Helper to get authorization headers from cookies
 const getAuthHeaders = () => {
   const token = Cookie.get('token');
   return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
@@ -11,32 +10,35 @@ const getAuthHeaders = () => {
 export const useAuthStore = create((set, get) => ({
   user: null,
   isAuthenticated: false,
-  loading: false,
+  loading: true, // Start as true so we know we are checking cookies
   error: null,
 
   initializeAuth: () => {
-    const userCookie = Cookie.get('user');
-    const token = Cookie.get('token');
-    if (userCookie && token) {
-      try {
-        const parsedUser = JSON.parse(userCookie);
-        set({ user: parsedUser, isAuthenticated: true });
-      } catch (err) {
-        console.error("Failed to parse user cookie:", err);
-        get().logout();
+    try {
+      const userCookie = Cookie.get('user');
+      const token = Cookie.get('token');
+      if (userCookie && token) {
+        set({
+          user: JSON.parse(userCookie),
+          isAuthenticated: true,
+          loading: false,
+        });
+        return;
       }
+    } catch (err) {
+      console.error("Failed to parse user cookie:", err);
+      Cookie.remove('token');
+      Cookie.remove('user');
     }
+    set({ user: null, isAuthenticated: false, loading: false });
   },
 
-  // Google Login action matching your FastAPI backend format
   googleLogin: async (credential) => {
     set({ loading: true, error: null });
     try {
-      // Your FastAPI backend expects { "token": credential }
       const res = await httpClient.post('/auth/google', { token: credential });
-      const data = res.data; // Expected: { access_token, token_type, user }
+      const data = res.data;
 
-      // Save tokens and user info in cookies (matching your preferred naming convention)
       Cookie.set('token', data.access_token, { expires: 7 });
       Cookie.set('user', JSON.stringify(data.user), { expires: 7 });
 
@@ -53,16 +55,12 @@ export const useAuthStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const res = await httpClient.post('/auth/login', credentials);
-      const data = res.data; // Expected: { access_token, token_type, user }
+      const data = res.data;
 
-      const token = data.access_token;
-      const user = data.user;
+      Cookie.set('token', data.access_token, { expires: 7 });
+      Cookie.set('user', JSON.stringify(data.user), { expires: 7 });
 
-      // Set cookies
-      Cookie.set('token', token, { expires: 7 });
-      Cookie.set('user', JSON.stringify(user), { expires: 7 });
-
-      set({ user, isAuthenticated: true, loading: false });
+      set({ user: data.user, isAuthenticated: true, loading: false });
       return { success: true };
     } catch (err) {
       const detail = err.response?.data?.detail;
@@ -72,7 +70,6 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Register action (matches FastAPI /api/auth/register)
   register: async (userData) => {
     set({ loading: true, error: null });
     try {
@@ -84,13 +81,10 @@ export const useAuthStore = create((set, get) => ({
       });
 
       const data = loginRes.data;
-      const token = data.access_token;
-      const user = data.user;
+      Cookie.set('token', data.access_token, { expires: 7 });
+      Cookie.set('user', JSON.stringify(data.user), { expires: 7 });
 
-      Cookie.set('token', token, { expires: 7 });
-      Cookie.set('user', JSON.stringify(user), { expires: 7 });
-
-      set({ user, isAuthenticated: true, loading: false });
+      set({ user: data.user, isAuthenticated: true, loading: false });
       return { success: true };
     } catch (err) {
       const detail = err.response?.data?.detail;
@@ -104,7 +98,7 @@ export const useAuthStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const res = await httpClient.get('/auth/profile', getAuthHeaders());
-      const userData = res.data; // Expected DisplayAccount object
+      const userData = res.data;
       
       Cookie.set('user', JSON.stringify(userData), { expires: 7 });
       set({ user: userData, isAuthenticated: true, loading: false });
@@ -114,7 +108,6 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Update user profile details (username, first_name, last_name)
   updateProfile: async (profileData) => {
     set({ loading: true, error: null });
     try {
@@ -132,7 +125,6 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Change password action
   changePassword: async (passwordData) => {
     set({ loading: true, error: null });
     try {
@@ -147,7 +139,6 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Upload profile avatar image
   uploadAvatar: async (file) => {
     set({ loading: true, error: null });
     try {
@@ -173,10 +164,9 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Logout action
   logout: () => {
     Cookie.remove('token');
     Cookie.remove('user');
-    set({ user: null, isAuthenticated: false, error: null });
+    set({ user: null, isAuthenticated: false, loading: false, error: null });
   }
 }));

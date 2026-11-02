@@ -41,6 +41,9 @@ const Header = () => {
   const themeDropdownRef = useRef(null);
   const userDropdownRef = useRef(null);
 
+  // Check if current user has admin role
+  const isAdmin = user?.role === 'admin';
+
   useEffect(() => {
     initializeAuth();
     const savedTheme = localStorage.getItem('codewalk_theme') || 'dark';
@@ -164,8 +167,8 @@ const Header = () => {
         {/* Right Side: Actions, Theme Switcher, & User Auth */}
         <div className="flex items-center gap-3">
           
-          {/* Quick Create Button (If Authenticated) */}
-          {isAuthenticated && (
+          {/* Quick Create Button (Gated strictly for Admin users) */}
+          {isAuthenticated && isAdmin && (
             <Link
               href="/content/new"
               className="hidden lg:flex items-center gap-2 px-3.5 py-2 rounded-xl font-semibold text-sm transition-all hover:scale-105 shadow-sm"
@@ -261,14 +264,17 @@ const Header = () => {
                     <p className="font-bold text-sm truncate mt-0.5" style={{ color: 'var(--text-main)' }}>{user.username || user.email}</p>
                   </div>
 
-                  <Link
-                    href="/content/new"
-                    className="w-full text-left px-4 py-2.5 font-medium text-sm flex items-center gap-2.5 transition-colors hover:bg-black/5 dark:hover:bg-white/5"
-                    style={{ color: 'var(--text-main)' }}
-                  >
-                    <PlusCircleIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
-                    <span>Create New Post</span>
-                  </Link>
+                  {/* Create New Post (Admin Only) */}
+                  {isAdmin && (
+                    <Link
+                      href="/content/new"
+                      className="w-full text-left px-4 py-2.5 font-medium text-sm flex items-center gap-2.5 transition-colors hover:bg-black/5 dark:hover:bg-white/5"
+                      style={{ color: 'var(--text-main)' }}
+                    >
+                      <PlusCircleIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
+                      <span>Create New Post</span>
+                    </Link>
+                  )}
 
                   <Link
                     href="/settings"
@@ -390,14 +396,17 @@ const Header = () => {
           
           {isAuthenticated ? (
             <div className="pt-2 border-t space-y-1.5" style={{ borderColor: 'var(--border-color)' }}>
-              <Link
-                href="/content/new"
-                className="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium transition-colors"
-                style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
-              >
-                <PlusCircleIcon className="h-5 w-5" />
-                <span>Create New Post</span>
-              </Link>
+              {/* Create New Post (Admin Only) */}
+              {isAdmin && (
+                <Link
+                  href="/content/new"
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium transition-colors"
+                  style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+                >
+                  <PlusCircleIcon className="h-5 w-5" />
+                  <span>Create New Post</span>
+                </Link>
+              )}
 
               <Link
                 href="/settings"

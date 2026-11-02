@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useContentStore } from '@/store/useContentStore';
+import { useRequireAdmin } from '@/hooks/useRequireAdmin'; // Import admin verification hook
 import { 
   BookOpenIcon, 
   FolderIcon, 
@@ -28,14 +29,38 @@ const TABS = [
 ];
 
 export default function DashboardEntriesClient() {
+  // Use custom admin check hook
+  const { isAdmin, isLoading: authLoading } = useRequireAdmin();
+  
   const { items, fetchContent, deleteContent, loading } = useContentStore();
   const [activeTab, setActiveTab] = useState('all');
   const [deletingId, setDeletingId] = useState(null);
 
+  console.log('isAdmin:', isAdmin);
+
   useEffect(() => {
-    AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
-    fetchContent(); // Fetch all items regardless of type
-  }, [fetchContent]);
+    // Only initialize AOS and fetch content once admin status is confirmed
+    fetchContent();
+  }, [isAdmin, fetchContent]);
+
+  // Show loading spinner while authenticating/verifying role
+  if (authLoading) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center font-theme-body"
+        style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-main)' }}
+      >
+        <p className="text-sm font-bold animate-pulse" style={{ color: 'var(--accent)' }}>
+          Verifying admin access...
+        </p>
+      </div>
+    );
+  }
+
+  // Prevent flash of content before router push triggers
+  if (!isAdmin) {
+    return null;
+  }
 
   // Filter items based on active tab
   const filteredItems = activeTab === 'all'
