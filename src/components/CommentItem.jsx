@@ -109,7 +109,7 @@ const CommentItem = ({ comment, contentId, currentUserId, onReply, onEdit, onDel
             </div>
           </form>
         ) : (
-          <p className="text-sm leading-relaxed opacity-90 font-theme-body" style={{ color: 'var(--text-main)' }}>
+          <p className="text-xs leading-relaxed opacity-90 font-theme-body" style={{ color: 'var(--text-main)' }}>
             {comment.body}
           </p>
         )}

@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
     });
 
     // Restore saved theme from localStorage on initial load
-    const savedTheme = localStorage.getItem('journal_theme') || 'dark';
+    const savedTheme = localStorage.getItem('codewalk_theme') || 'dark';
     const root = document.documentElement;
     ['light', 'dark', 'neon', 'argon'].forEach((t) => root.classList.remove(t));
     root.classList.add(savedTheme);

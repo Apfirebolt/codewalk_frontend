@@ -44,6 +44,7 @@ const Header = () => {
   useEffect(() => {
     initializeAuth();
     const savedTheme = localStorage.getItem('codewalk_theme') || 'dark';
+    console.log('Saved theme:', savedTheme);
     setCurrentTheme(savedTheme);
     applyThemeClass(savedTheme);
   }, [initializeAuth]);

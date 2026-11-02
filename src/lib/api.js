@@ -2,10 +2,10 @@ import axios from 'axios';
 import Cookie from 'js-cookie';
 import { toast } from 'react-toastify';
 
-// prod - https://journal-api.softgenie.org/
+// prod - https://api.codewalk.in/
 
 // Use environment variable for production, fallback to localhost for development
-const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const baseURL = process.env.NEXT__API_URL || 'https://api.codewalk.in/api';
 
 const httpClient = axios.create({
   baseURL,
