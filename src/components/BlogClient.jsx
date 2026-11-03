@@ -16,7 +16,7 @@ export default function BlogClient() {
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true, easing: 'ease-out-cubic' });
-    fetchContent('blog'); // Fetch only blog items
+    fetchContent('blog');
   }, [fetchContent]);
 
   // Extract unique tags across all blog items
