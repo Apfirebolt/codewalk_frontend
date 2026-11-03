@@ -26,11 +26,11 @@ const Footer = () => {
                 <CodeBracketSquareIcon className="h-5 w-5" />
               </div>
               <span className="text-2xl font-extrabold font-theme-heading tracking-tight" style={{ color: 'var(--text-main)' }}>
-                Codewalk <span className="text-sm px-2 py-0.5 rounded-full uppercase tracking-widest font-bold ml-1" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>Blog</span>
+                Codewalk <span className="text-sm px-2 py-0.5 rounded-full uppercase tracking-widest font-bold ml-1" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>.in</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed font-theme-body opacity-80 max-w-md" style={{ color: 'var(--text-muted)' }}>
-              My personal digital garden and portfolio showcasing software engineering articles, technical projects, and visual snapshots powered by FastAPI and Next.js.
+              My personal digital space and portfolio showcasing software engineering articles, technical projects, and visual experiences I gathered through my travels all under single roof.
             </p>
           </div>
 
@@ -67,10 +67,10 @@ const Footer = () => {
               Tech Stack
             </h3>
             <ul className="space-y-2.5 text-sm opacity-80">
-              <li className="flex items-center gap-2">⚡ FastAPI Backend</li>
-              <li className="flex items-center gap-2">⚛️ Next.js 14+ UI</li>
-              <li className="flex items-center gap-2">📝 Editor.js Blocks</li>
-              <li className="flex items-center gap-2">☁️ Cloudinary Storage</li>
+              <li className="flex items-center gap-2">⚡ FastAPI</li>
+              <li className="flex items-center gap-2">⚛️ Next.js 16+ UI</li>
+              <li className="flex items-center gap-2">📝 Editor.js </li>
+              <li className="flex items-center gap-2">🗄️ Redis</li>
             </ul>
           </div>
 
@@ -90,11 +90,6 @@ const Footer = () => {
                   <span>GitHub Repository</span>
                 </a>
               </li>
-              <li>
-                <Link href="/editor/new" className="transition-opacity opacity-80 hover:opacity-100 flex items-center gap-2">
-                  <span>Author Dashboard</span>
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -105,7 +100,7 @@ const Footer = () => {
           className="border-t pt-6 mt-8 flex flex-col md:flex-row justify-between items-center font-theme-body gap-4 text-xs opacity-75"
           style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}
         >
-          <p>&copy; {new Date().getFullYear()} Codewalk Blog Platform. Built with passion & code.</p>
+          <p>&copy; {new Date().getFullYear()} Codewalk. Built with passion & code.</p>
           
           <div className="flex space-x-6">
             <Link href="/privacy" className="hover:opacity-100 transition-opacity">

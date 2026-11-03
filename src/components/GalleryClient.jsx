@@ -46,13 +46,13 @@ export default function GalleryClient() {
         <div className="text-center space-y-4 max-w-2xl mx-auto" data-aos="fade-down">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-extrabold uppercase tracking-widest shadow-sm" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}>
             <PhotoIcon className="h-4 w-4" />
-            <span>Visual Showcase</span>
+            <span>Travel Photos</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold font-theme-heading tracking-tight">
             Gallery <span style={{ color: 'var(--accent)' }}>Snapshots</span>
           </h1>
           <p className="text-sm sm:text-base opacity-80 font-theme-body" style={{ color: 'var(--text-muted)' }}>
-            Moments, travel captures, and creative snapshots captured through the lens and stored via cloud media.
+            Moments, travel captures, and photos captured through my journeys and experiences I've had along the way.
           </p>
         </div>
 

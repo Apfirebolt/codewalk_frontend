@@ -51,13 +51,13 @@ export default function ProjectsClient() {
         <div className="text-center space-y-4 max-w-2xl mx-auto" data-aos="fade-down">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-extrabold uppercase tracking-widest shadow-sm" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}>
             <SparklesIcon className="h-4 w-4" />
-            <span>Software Portfolio</span>
+            <span>My Portfolio</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold font-theme-heading tracking-tight">
-            Projects <span style={{ color: 'var(--accent)' }}>Showcase</span>
+            Engineering <span style={{ color: 'var(--accent)' }}>Projects</span>
           </h1>
           <p className="text-sm sm:text-base opacity-80 font-theme-body" style={{ color: 'var(--text-muted)' }}>
-            A curated collection of full-stack applications, microservices APIs, and interactive digital tools.
+            A collection of my Engineering work and projects. It includes full-stack and desktop applications, open source APIs, UI Applications and more which I have developed throughout my career.
           </p>
         </div>
 

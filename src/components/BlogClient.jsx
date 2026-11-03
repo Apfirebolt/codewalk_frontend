@@ -63,13 +63,13 @@ export default function BlogClient() {
         <div className="text-center space-y-4 max-w-2xl mx-auto" data-aos="fade-down">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-extrabold uppercase tracking-widest shadow-sm" style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}>
             <BookOpenIcon className="h-4 w-4" />
-            <span>Developer Digital Garden</span>
+            <span>My Blog</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-extrabold font-theme-heading tracking-tight">
-            Blog <span style={{ color: 'var(--accent)' }}>Articles</span>
+            Developer <span style={{ color: 'var(--accent)' }}>Articles</span>
           </h1>
           <p className="text-sm sm:text-base opacity-80 font-theme-body" style={{ color: 'var(--text-muted)' }}>
-            Deep dives into software engineering, architectural patterns, backend systems, and web development.
+            Articles which deep dive into software engineering, architectural patterns, backend systems, web development related to my experiences and learnings in the field and about me 😀.
           </p>
         </div>
 

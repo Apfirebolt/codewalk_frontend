@@ -112,15 +112,14 @@ const Header = () => {
               <span className="text-2xl sm:text-3xl font-extrabold font-theme-heading tracking-tight flex items-center gap-1.5"
                 style={{ color: 'var(--text-main)' }}
               >
-                Codewalk
+                Code
                 <span className="text-xs px-2 py-0.5 rounded-full uppercase tracking-widest font-bold"
                   style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
-                >
-                  Blog
+                >Walk
                 </span>
               </span>
               <span className="text-[10px] tracking-widest uppercase font-semibold opacity-60" style={{ color: 'var(--text-muted)' }}>
-                My Personal Space
+                Digital Space of Amit PR
               </span>
             </div>
           </Link>
