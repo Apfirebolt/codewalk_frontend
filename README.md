@@ -52,6 +52,8 @@ codewalk-frontend/
 ├── public/              # Static assets, icons, and images
 ├── postcss.config.mjs   # Postcss configuration
 └── package.json         # Project dependencies and scripts
+```
+
 
 ## Project Screenshots
 
@@ -66,3 +68,4 @@ codewalk-frontend/
 
 ### Homepage
 ![Screenshot](/screenshots/4.jpg)
+
