@@ -123,6 +123,52 @@ const Header = () => {
               </span>
             </div>
           </Link>
+
+          {/* Theme Selector Dropdown */}
+          <div className="relative" ref={themeDropdownRef}>
+            <button
+              onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
+              className="p-2.5 rounded-2xl border flex items-center gap-2 transition-all shadow-sm hover:scale-105 cursor-pointer"
+              style={{
+                backgroundColor: 'var(--card-bg)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--text-main)'
+              }}
+              aria-label="Select theme"
+            >
+              <SwatchIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
+              <span className="hidden sm:inline font-semibold uppercase tracking-wider text-xs">
+                {currentTheme}
+              </span>
+            </button>
+
+            {isThemeDropdownOpen && (
+              <div 
+                className="absolute right-0 mt-3 w-48 rounded-2xl shadow-2xl border py-2 z-50 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
+                style={{
+                  backgroundColor: 'var(--card-bg)',
+                  borderColor: 'var(--border-color)',
+                }}
+              >
+                <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest opacity-50" style={{ color: 'var(--text-muted)' }}>
+                  Color Theme
+                </div>
+                {themes.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => handleThemeChange(t.id)}
+                    className="w-full text-sm text-left px-4 py-2.5 font-medium flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+                    style={{ color: 'var(--text-main)' }}
+                  >
+                    <span>{t.name}</span>
+                    {currentTheme === t.id && (
+                      <CheckIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Desktop Navigation Links (Blog, Projects, Gallery) */}
@@ -177,52 +223,6 @@ const Header = () => {
               <span>New Post</span>
             </Link>
           )}
-
-          {/* Theme Selector Dropdown */}
-          <div className="relative" ref={themeDropdownRef}>
-            <button
-              onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
-              className="p-2.5 rounded-2xl border flex items-center gap-2 transition-all shadow-sm hover:scale-105 cursor-pointer"
-              style={{
-                backgroundColor: 'var(--card-bg)',
-                borderColor: 'var(--border-color)',
-                color: 'var(--text-main)'
-              }}
-              aria-label="Select theme"
-            >
-              <SwatchIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
-              <span className="hidden sm:inline font-semibold uppercase tracking-wider text-xs">
-                {currentTheme}
-              </span>
-            </button>
-
-            {isThemeDropdownOpen && (
-              <div 
-                className="absolute right-0 mt-3 w-48 rounded-2xl shadow-2xl border py-2 z-50 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
-                style={{
-                  backgroundColor: 'var(--card-bg)',
-                  borderColor: 'var(--border-color)',
-                }}
-              >
-                <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest opacity-50" style={{ color: 'var(--text-muted)' }}>
-                  Color Theme
-                </div>
-                {themes.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => handleThemeChange(t.id)}
-                    className="w-full text-sm text-left px-4 py-2.5 font-medium flex items-center justify-between transition-colors hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
-                    style={{ color: 'var(--text-main)' }}
-                  >
-                    <span>{t.name}</span>
-                    {currentTheme === t.id && (
-                      <CheckIcon className="h-4 w-4" style={{ color: 'var(--accent)' }} />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           {/* User Authentication Status / Profile Dropdown */}
           {isAuthenticated && user ? (
