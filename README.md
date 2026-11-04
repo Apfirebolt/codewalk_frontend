@@ -55,6 +55,14 @@ codewalk-frontend/
 
 ## Project Screenshots
 
-![Project Screenshot 1](screenshots/1.jpg)
-![Project Screenshot 2](screenshots/2.jpg)
-![Project Screenshot 3](screenshots/3.jpg)
+### Project
+![Screenshot](/screenshots/1.jpg)
+
+### Gallery
+![Screenshot](/screenshots/2.jpg)
+
+### Gallery Detail Page
+![Screenshot](/screenshots/3.jpg)
+
+### Homepage
+![Screenshot](/screenshots/4.jpg)
