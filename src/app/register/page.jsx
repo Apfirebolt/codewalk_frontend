@@ -106,15 +106,12 @@ export default function RegisterPage() {
                     <CodeBracketSquareIcon className="h-6 w-6" />
                   </div>
                   <span className="text-xs px-2.5 py-1 rounded-full uppercase tracking-widest font-extrabold" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>
-                    Author Registration
+                    User Registration
                   </span>
                 </div>
                 <h1 className="text-3xl font-extrabold tracking-tight font-theme-heading">
                   Join <span style={{ color: 'var(--accent)' }}>Codewalk</span>
                 </h1>
-                <p className="font-theme-body leading-relaxed opacity-80 text-sm" style={{ color: 'var(--text-muted)' }}>
-                  Create your author account to publish articles, showcase projects, and curate your gallery.
-                </p>
               </div>
 
               {(error || localError) && (

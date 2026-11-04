@@ -104,15 +104,12 @@ export default function LoginPage() {
                     <CodeBracketSquareIcon className="h-6 w-6" />
                   </div>
                   <span className="text-xs px-2.5 py-1 rounded-full uppercase tracking-widest font-extrabold" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>
-                    Author Access
+                    Personal Blog
                   </span>
                 </div>
                 <h1 className="text-3xl font-extrabold tracking-tight font-theme-heading">
                   Welcome back to <span style={{ color: 'var(--accent)' }}>Codewalk</span>
                 </h1>
-                <p className="font-theme-body leading-relaxed opacity-80 text-sm" style={{ color: 'var(--text-muted)' }}>
-                  Sign in to manage your blog articles, projects showcase, and gallery snapshots.
-                </p>
               </div>
 
               {(error || localError) && (
@@ -258,7 +255,7 @@ export default function LoginPage() {
                   <div className="space-y-3">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-md bg-white/10 text-white border border-white/20">
                       <SparklesIcon className="h-3.5 w-3.5 text-amber-400" />
-                      <span>Digital Garden</span>
+                      <span>Digital Space</span>
                     </div>
                     <blockquote className="space-y-1.5">
                       <p className="text-sm italic font-theme-body text-gray-200 leading-relaxed">
