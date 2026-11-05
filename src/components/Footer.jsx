@@ -30,7 +30,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-sm leading-relaxed font-theme-body opacity-80 max-w-md" style={{ color: 'var(--text-muted)' }}>
-              My personal digital space and portfolio showcasing software engineering articles, technical projects, and visual experiences I gathered through my travels all under single roof.
+              My personal digital space and portfolio showcasing software engineering articles, technical projects, and visual experiences I gathered through my travels.
             </p>
           </div>
 
@@ -92,24 +92,14 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
         </div>
 
         {/* Divider & Copyright */}
         <div 
-          className="border-t pt-6 mt-8 flex flex-col md:flex-row justify-between items-center font-theme-body gap-4 text-xs opacity-75"
+          className="border-t pt-6 mt-8 text-center font-theme-body gap-4 text-xs opacity-75"
           style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}
         >
-          <p>&copy; {new Date().getFullYear()} Codewalk. Built with passion & code.</p>
-          
-          <div className="flex space-x-6">
-            <Link href="/privacy" className="hover:opacity-100 transition-opacity">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:opacity-100 transition-opacity">
-              Terms of Service
-            </Link>
-          </div>
+          <p>&copy; {new Date().getFullYear()} Codewalk, all rights reserved.</p>
         </div>
       </div>
     </footer>
