@@ -148,7 +148,7 @@ export default function ProjectDetailClient({ slug }) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest border shadow-sm" style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-color)', color: 'var(--accent)' }}>
               <SparklesIcon className="h-3.5 w-3.5" />
-              <span>Project Showcase</span>
+              <span>Projects</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-xs opacity-75 font-theme-body">

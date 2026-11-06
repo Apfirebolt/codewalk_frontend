@@ -380,7 +380,7 @@ const Header = () => {
               style={pathname.startsWith('/projects') ? { backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' } : { color: 'var(--text-main)' }}
             >
               <SparklesIcon className="h-5 w-5" />
-              <span>Projects Showcase</span>
+              <span>Projects</span>
             </Link>
 
             <Link
